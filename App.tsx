@@ -4,13 +4,19 @@ import { NuevoPresupuesto } from './components/NuevoPresupuesto';
 
 export const App = () => {
   const [presupuesto, setPresupuesto] = useState(0);
-  const [mensaje, setMensaje] = useState('');
+  const [isValidPresupuesto, setIsValidPresupuesto] = useState(false);
   return (
-    <NuevoPresupuesto
-      presupuesto={presupuesto}
-      setPresupuesto={setPresupuesto}
-      mensaje={mensaje}
-      setMensaje={setMensaje}
-    />
+    <div>
+      {isValidPresupuesto ? (
+        <h1>Hola</h1>
+      ) : (
+        <NuevoPresupuesto
+          presupuesto={presupuesto}
+          setPresupuesto={setPresupuesto}
+          isValidPresupuesto={isValidPresupuesto}
+          setIsValidPresupuesto={setIsValidPresupuesto}
+        />
+      )}
+    </div>
   );
 };

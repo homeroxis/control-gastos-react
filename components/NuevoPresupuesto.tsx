@@ -1,25 +1,30 @@
 import * as React from 'react';
 import { useState } from 'react';
+import { Alert } from '../ui/Alert';
 
 interface Props {
   presupuesto: number;
   setPresupuesto: React.Dispatch<React.SetStateAction<number>>;
-  mensaje: string;
-  setMensaje: React.Dispatch<React.SetStateAction<string>>;
+  isValidPresupuesto: boolean;
+  setIsValidPresupuesto: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export const NuevoPresupuesto = ({ 
-  presupuesto, 
+export const NuevoPresupuesto = ({
+  presupuesto,
   setPresupuesto,
-  mensaje,
-  setMensaje
-}:Props) => {
-  const handleSubmit = (e) => {
+  isValidPresupuesto,
+  setIsValidPresupuesto,
+}: Props) => {
+  const [mensaje, setMensaje] = useState('');
+
+  const handleSubmit = (e: any) => {
     e.preventDefault();
-    if ((e.target.value = '' || e.target.value <= 0)) {
-      console.log('Debe ingresar un valor válido');
+    if (!presupuesto || presupuesto <= 0) {
+      setMensaje('Debe ingresar un valor válido');
+      console.log(typeof mensaje);
+      return;
     }
-    console.log(typeof presupuesto);
+    setIsValidPresupuesto(true);
   };
 
   return (
@@ -29,13 +34,15 @@ export const NuevoPresupuesto = ({
         <form onSubmit={handleSubmit}>
           <div className="mb-3">
             <input
-              type="text"
+              type="number"
               className="form-control"
               value={presupuesto}
               onChange={(e) => setPresupuesto(Number(e.target.value))}
             />
           </div>
-          <input type="submit" className="btn btn-primary" />
+          {mensaje && <Alert msg={mensaje} tipo="success" />}
+
+          <input type="submit" className="btn btn-primary" value="añadir" />
         </form>
       </div>
     </div>
