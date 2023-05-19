@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { useState } from 'react';
 import { useForms } from '../hooks/useForms';
 
 interface Props {
@@ -17,16 +16,15 @@ export const Modal = ({
   gasto,
   setGasto,
 }: Props) => {
-  const [categoria, setCategoria] = useState('');
-
-  const { nombre, cantidad, onChange, formData } = useForms({
+  const { nombre, cantidad, poto, onChange, formData } = useForms({
     nombre: '',
     cantidad: '',
-    categoria,
+    poto: '',
   });
 
-  const handleSubmit = (e: any) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
     console.log('Sibmit desde modal', formData);
   };
 
@@ -64,18 +62,19 @@ export const Modal = ({
             </div>
             <div className="div mb-3">
               <label htmlFor="nombre" className="label-control">
-                Cantidad
+                Categoria
               </label>
               <select
                 className="form-control"
-                value={categoria}
-                onChange={(e: any) => setCategoria(e.target.value)}
+                value={formData.categoria}
+                onChange={onChange}
               >
                 <option value="">--Seleccione categoría--</option>
                 <option value="salud">Salud</option>
                 <option value="comida">Comida</option>
                 <option value="varios">Varios</option>
-                <option value="varios">Transporte</option>
+                <option value="transporte">Transporte</option>
+                <option value="ocio">Ocio</option>
               </select>
             </div>
             <button className="btn btn-primary">añadir gasto</button>

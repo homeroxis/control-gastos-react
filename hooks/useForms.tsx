@@ -13,6 +13,7 @@ export const useForms = (initState) => {
 
   return {
     ...formData,
+    setFormData,
     formData,
     // functions
     onChange,
