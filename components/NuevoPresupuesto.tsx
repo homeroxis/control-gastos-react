@@ -21,7 +21,6 @@ export const NuevoPresupuesto = ({
     e.preventDefault();
     if (!presupuesto || presupuesto <= 0) {
       setMensaje('Debe ingresar un valor válido');
-      console.log(typeof mensaje);
       return;
     }
     setIsValidPresupuesto(true);
