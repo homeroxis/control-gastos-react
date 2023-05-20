@@ -6,22 +6,12 @@ import { Alert } from './Alert';
 
 interface Props {
   title?: string;
-  gastos: any[];
-  setGastos: React.Dispatch<React.SetStateAction<any[]>>;
-  // gasto: {};
-  // setGasto: React.Dispatch<React.SetStateAction<{}>>;
-  modal: boolean;
   setModal: React.Dispatch<React.SetStateAction<boolean>>;
   guardarGasto: (args: gastoProps) => void;
 }
 
 export const Modal = ({
   title = 'Sin título',
-  gastos,
-  setGastos,
-  // gasto,
-  // setGasto,
-  modal,
   setModal,
   guardarGasto,
 }: Props) => {
@@ -30,7 +20,7 @@ export const Modal = ({
   const { nombre, cantidad, categoria, onChange, formData, resetForm } =
     useForms({
       nombre: '',
-      cantidad: '',
+      cantidad: 0,
       categoria: '',
     });
 
@@ -47,7 +37,7 @@ export const Modal = ({
 
       return;
     }
-    guardarGasto(formData);
+    guardarGasto({ nombre, cantidad, categoria });
     resetForm();
     cerrarModal();
   };

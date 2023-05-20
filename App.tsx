@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { useState } from 'react';
 import { ControlPresupuesto } from './components/ControlPresupuesto';
+import { ListadoGastos } from './components/ListadoGastos';
 import { NuevoPresupuesto } from './components/NuevoPresupuesto';
 import { generarId } from './helpers';
 import { Modal } from './ui/Modal';
@@ -13,26 +14,40 @@ export interface gastoProps {
 }
 
 export const App = () => {
-  const [presupuesto, setPresupuesto] = useState('');
-  const [gastos, setGastos] = useState([]);
-  // const [gasto, setGasto] = useState({});
+  const [presupuesto, setPresupuesto] = useState();
   const [modal, setModal] = useState(false);
+  const [gastos, setGastos] = useState([]);
   const [isValidPresupuesto, setIsValidPresupuesto] = useState(false);
 
   const openModal = () => {
     setModal(true);
   };
 
-  const guardarGasto = (gastoObj: gastoProps) => {
-    gastoObj.id = generarId();
-    setGastos([...gastos, gastoObj]);
-    console.log('desde App', gastos);
+  const guardarGasto = (gasto: gastoProps) => {
+    gasto.id = generarId();
+    setGastos([...gastos, gasto]);
   };
 
   return (
     <div>
       {isValidPresupuesto ? (
-        <ControlPresupuesto presupuesto={presupuesto} />
+        <div>
+          <ControlPresupuesto presupuesto={presupuesto} />
+          <ListadoGastos gastos={gastos} />
+          <button
+            className="btn btn-danger"
+            style={{
+              position: 'fixed',
+              bottom: '20px',
+              right: '20px',
+              borderRadius: '50%',
+              boxShadow: '2px 2px 5px 2px rgba(0, 0, 0, 0.4)',
+            }}
+            onClick={openModal}
+          >
+            +
+          </button>
+        </div>
       ) : (
         <NuevoPresupuesto
           presupuesto={presupuesto}
@@ -41,26 +56,9 @@ export const App = () => {
           setIsValidPresupuesto={setIsValidPresupuesto}
         />
       )}
-      <button
-        className="btn btn-danger"
-        style={{
-          position: 'fixed',
-          bottom: '20px',
-          right: '20px',
-          borderRadius: '50%',
-          boxShadow: '2px 2px 5px 2px rgba(0, 0, 0, 0.4)',
-        }}
-        onClick={openModal}
-      >
-        +
-      </button>
+
       {modal && (
         <Modal
-          gastos={gastos}
-          setGastos={setGastos}
-          // gasto={gasto}
-          // setGasto={setGasto}
-          modal={modal}
           setModal={setModal}
           title="Ingresar Gasto"
           guardarGasto={guardarGasto}
