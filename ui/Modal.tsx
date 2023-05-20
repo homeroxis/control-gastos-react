@@ -1,38 +1,67 @@
 import * as React from 'react';
+import { useState } from 'react';
+import { gastoProps } from '../App';
 import { useForms } from '../hooks/useForms';
+import { Alert } from './Alert';
 
 interface Props {
-  title: string;
+  title?: string;
   gastos: any[];
   setGastos: React.Dispatch<React.SetStateAction<any[]>>;
-  gasto: {};
-  setGasto: React.Dispatch<React.SetStateAction<{}>>;
+  // gasto: {};
+  // setGasto: React.Dispatch<React.SetStateAction<{}>>;
+  modal: boolean;
+  setModal: React.Dispatch<React.SetStateAction<boolean>>;
+  guardarGasto: (args: gastoProps) => void;
 }
 
 export const Modal = ({
   title = 'Sin título',
   gastos,
   setGastos,
-  gasto,
-  setGasto,
+  // gasto,
+  // setGasto,
+  modal,
+  setModal,
+  guardarGasto,
 }: Props) => {
-  const { nombre, cantidad, poto, onChange, formData } = useForms({
-    nombre: '',
-    cantidad: '',
-    poto: '',
-  });
+  const [mensaje, setMensaje] = useState('');
+
+  const { nombre, cantidad, categoria, onChange, formData, resetForm } =
+    useForms({
+      nombre: '',
+      cantidad: '',
+      categoria: '',
+    });
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    const { nombre, cantidad, categoria } = formData;
 
-    console.log('Sibmit desde modal', formData);
+    // validación
+    if (nombre === '' || cantidad === '' || categoria === '') {
+      setMensaje('Los campos son obligatorios');
+      setTimeout(() => {
+        setMensaje('');
+      }, 3000);
+
+      return;
+    }
+    guardarGasto(formData);
+    resetForm();
+    cerrarModal();
+  };
+
+  const cerrarModal = () => {
+    setModal(false);
   };
 
   return (
     <div className="bg-modal">
-      <div className="card" style={{ with: '60vh' }}>
+      <div className="card" style={{ with: '70%' }}>
         <div className="card-body">
           <h5 className="card-title">{title}</h5>
+          <hr />
           <form onSubmit={handleSubmit}>
             <div className="div mb-3">
               <label htmlFor="nombre" className="label-control">
@@ -53,9 +82,9 @@ export const Modal = ({
               </label>
               <input
                 name="cantidad"
-                value={cantidad}
+                value={Number(cantidad)}
                 onChange={onChange}
-                type="text"
+                type="number"
                 className="form-control"
                 placeholder="Ej. 1000"
               />
@@ -66,6 +95,7 @@ export const Modal = ({
               </label>
               <select
                 className="form-control"
+                name="categoria"
                 value={formData.categoria}
                 onChange={onChange}
               >
@@ -77,7 +107,17 @@ export const Modal = ({
                 <option value="ocio">Ocio</option>
               </select>
             </div>
-            <button className="btn btn-primary">añadir gasto</button>
+            {mensaje && <Alert msg={mensaje} tipo="danger" />}
+            <button type="submit" className="btn btn-primary me-2">
+              añadir gasto
+            </button>
+            <button
+              type="button"
+              className="btn btn-danger"
+              onClick={cerrarModal}
+            >
+              cancelar
+            </button>
           </form>
         </div>
       </div>
