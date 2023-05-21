@@ -101,6 +101,7 @@ export const App = () => {
           setModal={setModal}
           guardarGasto={guardarGasto}
           gastoEditar={gastoEditar}
+          setGastoEditar={setGastoEditar}
         />
       )}
     </div>

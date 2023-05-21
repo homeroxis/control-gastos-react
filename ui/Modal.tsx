@@ -8,9 +8,15 @@ interface Props {
   setModal: React.Dispatch<React.SetStateAction<boolean>>;
   guardarGasto: (args: gastoProps) => void;
   gastoEditar: any;
+  setGastoEditar: any;
 }
 
-export const Modal = ({ setModal, guardarGasto, gastoEditar }: Props) => {
+export const Modal = ({
+  setModal,
+  guardarGasto,
+  gastoEditar,
+  setGastoEditar,
+}: Props) => {
   const [mensaje, setMensaje] = useState('');
 
   const {
@@ -64,6 +70,7 @@ export const Modal = ({ setModal, guardarGasto, gastoEditar }: Props) => {
 
   const cerrarModal = () => {
     setModal(false);
+    setGastoEditar({});
   };
 
   return (

@@ -9,8 +9,17 @@ const root = createRoot(rootElement);
 
 root.render(
   <StrictMode>
-    <div className="container">
-      <App />
+    <div>
+      <nav className="navbar bg-primary" data-bs-theme="dark">
+        <div className="container-fluid">
+          <a className="navbar-brand" href="#">
+            Control Presupuesto
+          </a>
+        </div>
+      </nav>
+      <div className="container">
+        <App />
+      </div>
     </div>
   </StrictMode>
 );
