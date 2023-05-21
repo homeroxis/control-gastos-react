@@ -9,7 +9,7 @@ import {
 import 'react-swipeable-list/dist/styles.css';
 import { formatCurrency, formatearFecha } from '../helpers';
 
-export const Gasto = ({ gasto, setGastoEditar }) => {
+export const Gasto = ({ gasto, setGastoEditar, eliminarGasto }) => {
   const { nombre, cantidad, categoria, id, fecha } = gasto;
 
   const leadingActions = () => (
@@ -20,9 +20,7 @@ export const Gasto = ({ gasto, setGastoEditar }) => {
 
   const trailingActions = () => (
     <TrailingActions>
-      <SwipeAction onClick={() => console.log('Eliminar')}>
-        Eliminar
-      </SwipeAction>
+      <SwipeAction onClick={() => eliminarGasto(id)}>Eliminar</SwipeAction>
     </TrailingActions>
   );
 

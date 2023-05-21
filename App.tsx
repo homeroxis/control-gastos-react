@@ -4,6 +4,7 @@ import { ControlPresupuesto } from './components/ControlPresupuesto';
 import { ListadoGastos } from './components/ListadoGastos';
 import { NuevoPresupuesto } from './components/NuevoPresupuesto';
 import { generarId } from './helpers';
+import { Alert } from './ui/Alert';
 import { Modal } from './ui/Modal';
 
 export interface gastoProps {
@@ -20,6 +21,7 @@ export const App = () => {
   const [gastos, setGastos] = useState([]);
   const [isValidPresupuesto, setIsValidPresupuesto] = useState(false);
   const [gastoEditar, setGastoEditar] = useState({});
+  const [mensaje, setMensaje] = useState('');
 
   useEffect(() => {
     if (Object.keys(gastoEditar).length > 0) {
@@ -31,18 +33,33 @@ export const App = () => {
     setModal(true);
   };
 
+  const setAlerta = (mensaje: string, tipo: string) => {
+    setMensaje(mensaje);
+    setTimeout(() => {
+      setMensaje('');
+    }, 2000);
+  };
+
   const guardarGasto = (gasto: gastoProps) => {
     if (gasto.id) {
       const gastosActualizados = gastos.map((gastoState) =>
         gastoState.id === gasto.id ? gasto : gastoState
       );
       setGastos(gastosActualizados);
+      setAlerta('Gasto actualizado...', 'success');
       setGastoEditar({});
       return;
     }
     gasto.id = generarId();
     gasto.fecha = Date.now();
     setGastos([...gastos, gasto]);
+    setAlerta('Gasto agregado correctamente...', 'success');
+  };
+
+  const eliminarGasto = (id: string) => {
+    const gastosActualizados = gastos.filter((gasto) => gasto.id !== id);
+    setGastos(gastosActualizados);
+    setAlerta('Gasto eliminado correctamente...', 'success');
   };
 
   return (
@@ -50,7 +67,13 @@ export const App = () => {
       {isValidPresupuesto ? (
         <div>
           <ControlPresupuesto presupuesto={presupuesto} gastos={gastos} />
-          <ListadoGastos gastos={gastos} setGastoEditar={setGastoEditar} />
+          {mensaje && <Alert msg={mensaje} tipo="success" />}
+
+          <ListadoGastos
+            gastos={gastos}
+            setGastoEditar={setGastoEditar}
+            eliminarGasto={eliminarGasto}
+          />
           <button
             className="btn btn-danger"
             style={{
