@@ -29,4 +29,9 @@
   align-items: center;
   font-size: 1.4rem;
   text-align: right;
+  height: 100%;
+}
+.swipeable-list {
+  height: auto;
+  margin-bottom: 1rem;
 }

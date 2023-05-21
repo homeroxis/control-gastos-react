@@ -16,9 +16,15 @@ export interface gastoProps {
 }
 
 export const App = () => {
-  const [presupuesto, setPresupuesto] = useState();
+  const [gastos, setGastos] = useState(
+    localStorage.getItem('gastos')
+      ? JSON.parse(localStorage.getItem('gastos'))
+      : []
+  );
+  const [presupuesto, setPresupuesto] = useState(
+    Number(localStorage.getItem('presupuesto')) ?? 0
+  );
   const [modal, setModal] = useState(false);
-  const [gastos, setGastos] = useState([]);
   const [isValidPresupuesto, setIsValidPresupuesto] = useState(false);
   const [gastoEditar, setGastoEditar] = useState({});
   const [mensaje, setMensaje] = useState('');
@@ -28,6 +34,22 @@ export const App = () => {
       setModal(true);
     }
   }, [gastoEditar]);
+
+  useEffect(() => {
+    localStorage.setItem('presupuesto', JSON.stringify(presupuesto));
+  }, [presupuesto]);
+
+  useEffect(() => {
+    localStorage.setItem('gastos', JSON.stringify(gastos));
+  }, [gastos]);
+
+  useEffect(() => {
+    const presupuestoLocalStorage =
+      Number(localStorage.getItem('presupuesto')) ?? 0;
+    if (presupuestoLocalStorage > 0) {
+      setIsValidPresupuesto(true);
+    }
+  }, []);
 
   const openModal = () => {
     setModal(true);

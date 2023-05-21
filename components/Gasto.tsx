@@ -30,7 +30,7 @@ export const Gasto = ({ gasto, setGastoEditar, eliminarGasto }) => {
         leadingActions={leadingActions()}
         trailingActions={trailingActions()}
       >
-        <div className="card mb-3" style={{ width: '100%', clear: 'both' }}>
+        <div className="card" style={{ width: '100%', clear: 'both' }}>
           <div className="card-header">
             <h5>{nombre}</h5>
           </div>
