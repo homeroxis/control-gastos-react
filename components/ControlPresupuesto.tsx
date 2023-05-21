@@ -1,8 +1,21 @@
 import * as React from 'react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { formatCurrency } from '../helpers';
 
-export const ControlPresupuesto = ({ presupuesto }) => {
+export const ControlPresupuesto = ({ presupuesto, gastos }) => {
+  const [disponible, setDisponible] = useState(0);
+  const [gastado, setGastado] = useState(0);
+
+  useEffect(() => {
+    const totalGastado = gastos.reduce(
+      (total, gasto) => Number(gasto.cantidad) + total,
+      0
+    );
+    setGastado(totalGastado);
+    const restante = presupuesto - totalGastado;
+    setDisponible(restante);
+  }, [gastos]);
+
   return (
     <div className="row mt-5">
       <div className="col-6"></div>
@@ -15,10 +28,14 @@ export const ControlPresupuesto = ({ presupuesto }) => {
             </span>
           </li>
           <li className="list-group-item text-primary">
-            Gastos: <span className="fw-bold text-dark">0</span>
+            Disponible:{' '}
+            <span className="fw-bold text-dark">
+              {formatCurrency(disponible)}
+            </span>
           </li>
           <li className="list-group-item text-primary">
-            Restante: <span className="fw-bold text-dark">0</span>
+            Gastado:{' '}
+            <span className="fw-bold text-dark">{formatCurrency(gastado)}</span>
           </li>
         </ul>
       </div>

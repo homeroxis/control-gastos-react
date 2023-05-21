@@ -1,28 +1,47 @@
 import * as React from 'react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { gastoProps } from '../App';
 import { useForms } from '../hooks/useForms';
 import { Alert } from './Alert';
 
 interface Props {
-  title?: string;
   setModal: React.Dispatch<React.SetStateAction<boolean>>;
   guardarGasto: (args: gastoProps) => void;
+  gastoEditar: any;
 }
 
-export const Modal = ({
-  title = 'Sin título',
-  setModal,
-  guardarGasto,
-}: Props) => {
+export const Modal = ({ setModal, guardarGasto, gastoEditar }: Props) => {
   const [mensaje, setMensaje] = useState('');
 
-  const { nombre, cantidad, categoria, onChange, formData, resetForm } =
-    useForms({
-      nombre: '',
-      cantidad: 0,
-      categoria: '',
-    });
+  const {
+    nombre,
+    cantidad,
+    categoria,
+    onChange,
+    formData,
+    setFormData,
+    resetForm,
+  } = useForms({
+    nombre: '',
+    cantidad: 0,
+    categoria: '',
+  });
+
+  const [id, setId] = useState();
+  const [fecha, setFecha] = useState();
+
+  useEffect(() => {
+    if (Object.keys(gastoEditar).length > 0) {
+      setFormData({
+        ...formData,
+        nombre: gastoEditar.nombre,
+        cantidad: gastoEditar.cantidad,
+        categoria: gastoEditar.categoria,
+      });
+      setId(gastoEditar.id);
+      setFecha(gastoEditar.fecha);
+    }
+  }, []);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -34,10 +53,11 @@ export const Modal = ({
       setTimeout(() => {
         setMensaje('');
       }, 3000);
-
       return;
     }
-    guardarGasto({ nombre, cantidad, categoria });
+
+    guardarGasto({ nombre, cantidad, categoria, id, fecha });
+
     resetForm();
     cerrarModal();
   };
@@ -50,7 +70,9 @@ export const Modal = ({
     <div className="bg-modal">
       <div className="card" style={{ with: '70%' }}>
         <div className="card-body">
-          <h5 className="card-title">{title}</h5>
+          <h5 className="card-title">
+            {gastoEditar.nombre ? 'Editar gasto' : 'Nuevo gasto'}
+          </h5>
           <hr />
           <form onSubmit={handleSubmit}>
             <div className="div mb-3">
@@ -99,7 +121,7 @@ export const Modal = ({
             </div>
             {mensaje && <Alert msg={mensaje} tipo="danger" />}
             <button type="submit" className="btn btn-primary me-2">
-              añadir gasto
+              {gastoEditar.nombre ? 'Actualizar gasto' : 'Añadir gasto'}
             </button>
             <button
               type="button"

@@ -1,27 +1,18 @@
 import * as React from 'react';
-import { useEffect } from 'react';
-import { formatCurrency } from '../helpers';
+import { Gasto } from './Gasto';
 
-export const ListadoGastos = ({ gastos }) => {
+export const ListadoGastos = ({ gastos, setGastoEditar }) => {
   return (
     <div className="row mt-5">
       <div className="col">
         {gastos &&
-          gastos.map((gasto) => {
-            const { nombre, cantidad, categoria, id } = gasto;
-            console.log(gastos);
-            console.log(typeof cantidad);
+          gastos.map((gasto: any) => {
             return (
-              <div className="card" key={id}>
-                <div className="card-header">
-                  <div className="card-title">{nombre}</div>
-                </div>
-                <div className="card-body">
-                  <div className="fw-bold">
-                    {formatCurrency(Number(cantidad))} - {categoria}
-                  </div>
-                </div>
-              </div>
+              <Gasto
+                gasto={gasto}
+                setGastoEditar={setGastoEditar}
+                key={gasto.id}
+              />
             );
           })}
       </div>

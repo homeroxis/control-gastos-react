@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { ControlPresupuesto } from './components/ControlPresupuesto';
 import { ListadoGastos } from './components/ListadoGastos';
 import { NuevoPresupuesto } from './components/NuevoPresupuesto';
@@ -11,6 +11,7 @@ export interface gastoProps {
   cantidad: number;
   categoria: string;
   id?: string;
+  fecha?: any;
 }
 
 export const App = () => {
@@ -18,13 +19,29 @@ export const App = () => {
   const [modal, setModal] = useState(false);
   const [gastos, setGastos] = useState([]);
   const [isValidPresupuesto, setIsValidPresupuesto] = useState(false);
+  const [gastoEditar, setGastoEditar] = useState({});
+
+  useEffect(() => {
+    if (Object.keys(gastoEditar).length > 0) {
+      setModal(true);
+    }
+  }, [gastoEditar]);
 
   const openModal = () => {
     setModal(true);
   };
 
   const guardarGasto = (gasto: gastoProps) => {
+    if (gasto.id) {
+      const gastosActualizados = gastos.map((gastoState) =>
+        gastoState.id === gasto.id ? gasto : gastoState
+      );
+      setGastos(gastosActualizados);
+      setGastoEditar({});
+      return;
+    }
     gasto.id = generarId();
+    gasto.fecha = Date.now();
     setGastos([...gastos, gasto]);
   };
 
@@ -32,8 +49,8 @@ export const App = () => {
     <div>
       {isValidPresupuesto ? (
         <div>
-          <ControlPresupuesto presupuesto={presupuesto} />
-          <ListadoGastos gastos={gastos} />
+          <ControlPresupuesto presupuesto={presupuesto} gastos={gastos} />
+          <ListadoGastos gastos={gastos} setGastoEditar={setGastoEditar} />
           <button
             className="btn btn-danger"
             style={{
@@ -52,7 +69,6 @@ export const App = () => {
         <NuevoPresupuesto
           presupuesto={presupuesto}
           setPresupuesto={setPresupuesto}
-          isValidPresupuesto={isValidPresupuesto}
           setIsValidPresupuesto={setIsValidPresupuesto}
         />
       )}
@@ -60,8 +76,8 @@ export const App = () => {
       {modal && (
         <Modal
           setModal={setModal}
-          title="Ingresar Gasto"
           guardarGasto={guardarGasto}
+          gastoEditar={gastoEditar}
         />
       )}
     </div>

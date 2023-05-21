@@ -5,14 +5,12 @@ import { Alert } from '../ui/Alert';
 interface Props {
   presupuesto: number;
   setPresupuesto: React.Dispatch<React.SetStateAction<number>>;
-  isValidPresupuesto: boolean;
   setIsValidPresupuesto: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export const NuevoPresupuesto = ({
   presupuesto,
   setPresupuesto,
-  isValidPresupuesto,
   setIsValidPresupuesto,
 }: Props) => {
   const [mensaje, setMensaje] = useState('');

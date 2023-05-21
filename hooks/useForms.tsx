@@ -18,6 +18,7 @@ export const useForms = (initState: any) => {
   return {
     ...formData,
     formData,
+    setFormData,
     // functions
     onChange,
     resetForm,
