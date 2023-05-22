@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { useState, useEffect } from 'react';
 import { ControlPresupuesto } from './components/ControlPresupuesto';
+import { Filtros } from './components/Filtros';
 import { ListadoGastos } from './components/ListadoGastos';
 import { NuevoPresupuesto } from './components/NuevoPresupuesto';
 import { generarId } from './helpers';
@@ -28,6 +29,8 @@ export const App = () => {
   const [isValidPresupuesto, setIsValidPresupuesto] = useState(false);
   const [gastoEditar, setGastoEditar] = useState({});
   const [mensaje, setMensaje] = useState('');
+  const [filtro, setFiltro] = useState('');
+  const [gastosFiltrados, setGastosFiltrados] = useState([]);
 
   useEffect(() => {
     if (Object.keys(gastoEditar).length > 0) {
@@ -50,6 +53,16 @@ export const App = () => {
       setIsValidPresupuesto(true);
     }
   }, []);
+
+  useEffect(() => {
+    if (filtro) {
+      const gastosFiltrados = gastos.filter(
+        (gasto) => gasto.categoria === filtro
+      );
+      setGastosFiltrados(gastosFiltrados);
+      console.log(gastosFiltrados);
+    }
+  }, [filtro]);
 
   const openModal = () => {
     setModal(true);
@@ -88,13 +101,23 @@ export const App = () => {
     <div>
       {isValidPresupuesto ? (
         <div>
-          <ControlPresupuesto presupuesto={presupuesto} gastos={gastos} />
+          <ControlPresupuesto
+            presupuesto={presupuesto}
+            setPresupuesto={setPresupuesto}
+            gastos={gastos}
+            setGastos={setGastos}
+            setIsValidPresupuesto={setIsValidPresupuesto}
+          />
           {mensaje && <Alert msg={mensaje} tipo="success" />}
+
+          {gastos.length && <Filtros filtro={filtro} setFiltro={setFiltro} />}
 
           <ListadoGastos
             gastos={gastos}
             setGastoEditar={setGastoEditar}
             eliminarGasto={eliminarGasto}
+            filtro={filtro}
+            gastosFiltrados={gastosFiltrados}
           />
           <button
             className="btn btn-danger"

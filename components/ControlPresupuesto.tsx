@@ -4,7 +4,13 @@ import { formatCurrency } from '../helpers';
 import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 
-export const ControlPresupuesto = ({ presupuesto, gastos }) => {
+export const ControlPresupuesto = ({
+  presupuesto,
+  setPresupuesto,
+  gastos,
+  setGastos,
+  setIsValidPresupuesto,
+}) => {
   const [porcentaje, setPorcentaje] = useState(0);
   const [disponible, setDisponible] = useState(0);
   const [gastado, setGastado] = useState(0);
@@ -40,6 +46,15 @@ export const ControlPresupuesto = ({ presupuesto, gastos }) => {
     setColor(nuevoColor);
   }, [porcentaje]);
 
+  const handleReset = () => {
+    const resultado = confirm('¿Deseas resetear presupuesto y gastos?');
+    if (resultado) {
+      setPresupuesto(0);
+      setGastos([]);
+      setIsValidPresupuesto(false);
+    }
+  };
+
   return (
     <div className="row mt-5">
       <div className="col-4">
@@ -54,7 +69,14 @@ export const ControlPresupuesto = ({ presupuesto, gastos }) => {
           })}
         />
       </div>
-      <div className="col-8 d-flex align-items-center">
+      <div className="col-8 d-flex flex-column justify-content-center">
+        <button
+          className="btn btn-danger mb-3"
+          style={{ width: '50%' }}
+          onClick={handleReset}
+        >
+          Resetear App
+        </button>
         <ul className="list-group container-fluid">
           <li className="list-group-item text-primary d-flex justify-content-between">
             Presupuesto:{' '}
